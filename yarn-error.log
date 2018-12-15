@@ -1,0 +1,48 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.6.0/libexec/bin/yarn.js star
+
+PATH: 
+  /Library/Java/apache-maven-3.5.3/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_171.jdk/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+Yarn version: 
+  1.6.0
+
+Node version: 
+  9.10.1
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/lufeng/webproduct/emoji/package.json: Unexpected token ] in JSON at position 335
+      at JSON.parse (<anonymous>)
+      at /usr/local/Cellar/yarn/1.6.0/libexec/lib/cli.js:1130:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/Cellar/yarn/1.6.0/libexec/lib/cli.js:98:30)
+      at /usr/local/Cellar/yarn/1.6.0/libexec/lib/cli.js:109:13
+      at <anonymous>
+
+npm manifest: 
+  {
+    "name": "emoji-libary",
+    "version": "1.0.0",
+    "description": "😄一个可筛选的emoji库",
+    "scripts": {
+      "build": "parcel build libs/index.js --no-source-maps",
+      "star": "parcel demo/index.html --open"
+    },
+    "main": "index.js",
+    "author": "lufeng",
+    "license": "MIT",
+    "private": false,
+    "keywords": [
+      "emoji",
+      "fed",
+    ]
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
