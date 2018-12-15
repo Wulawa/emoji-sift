@@ -3,44 +3,72 @@ import libary from './emoji';
 import assertEmoji from './assertEmoji';
 
 class EmojiLib {
-  constructor(validator) {
+  constructor(params) {
+    const { page, validator } = params
     this.validator = validator;
     // this.ordered = ordered;
-    this.fitzpatrick_scale_modifiers = ["🏻", "🏼", "🏽", "🏾", "🏿"];
+    this.fitzpatrick_scale_modifiers = ['🏻', '🏼', '🏽', '🏾', '🏿'];
+    this.beginSub = 0;
     this.libs = {};
     this.classify = {};
-    this.createLibary();
+    !page && this.createLibary();
   }
-  createLibary(){
-    for(let key in libary) {
-      if(assertEmoji(libary[key].char)) {
-        if(this.validator && !this.validator(libary[key])) continue;
-        this.libs[key] = libary[key];
-        if(this.classify[libary[key].category]) {
-          this.classify[libary[key].category][key] = libary[key];
+  createLibary() {
+    for (let i = 0; i < libary.length; i++) {
+      if (this.validator && !this.validator(libary[i])) continue;
+      if (assertEmoji(libary[i].char)) {
+        const name = libary[i].name;
+        const category = libary[i].category;
+        this.libs[name] = libary[i];
+        if (this.classify[category]) {
+          this.classify[category][name] = libary[i];
         } else {
-          this.classify[libary[key].category] = {
-            [key]: libary[key]
-          }
+          this.classify[category] = {
+            [name]: libary[i]
+          };
         }
       }
     }
   }
+  pagination({ pageNum, pageSize }) {
+    const data = {};
+    let num = 0;
+    for (let i = this.beginSub; i < libary.length; i++) {
+      if (this.validator && !this.validator(libary[i])) continue;
+      if (assertEmoji(libary[i].char)) {
+        const name = libary[i].name;
+        data[name] = libary[i];
+        num += 1;
+      }
+      if (num >= pageSize) {
+        this.beginSub = i + 1;
+        break;
+      }
+      this.beginSub = 0;
+    }
+    const page = {
+      beginSub: this.beginSub,
+      pageNum,
+      pageSize,
+      data
+    };
+    return page;
+  }
   search(keyword) {
-    if(!keyword) return this.libs;
+    if (!keyword) return this.libs;
     const result = {};
-    for(let key in this.libs) {
-      if(this.libs[key].keywords.includes(keyword)) {
+    for (let key in this.libs) {
+      if (this.libs[key].keywords.includes(keyword)) {
         result[key] = this.libs[key];
       }
     }
     return result;
   }
   category(categorys) {
-    if(!categorys) return this.libs;
+    if (!categorys) return this.libs;
     const result = {};
-    for(let key in this.libs) {
-      if(categorys.includes(this.libs[key].category)) {
+    for (let key in this.libs) {
+      if (categorys.includes(this.libs[key].category)) {
         result[key] = this.libs[key];
       }
     }
